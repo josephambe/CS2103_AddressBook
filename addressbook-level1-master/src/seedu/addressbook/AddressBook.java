@@ -746,13 +746,18 @@ public class AddressBook {
         try {
             lines = new ArrayList<>(Files.readAllLines(Paths.get(filePath)));
         } catch (FileNotFoundException fnfe) {
-            showToUser(String.format(MESSAGE_ERROR_MISSING_STORAGE_FILE, filePath));
-            exitProgram();
+            showErrorMessage(filePath, MESSAGE_ERROR_MISSING_STORAGE_FILE);
         } catch (IOException ioe) {
-            showToUser(String.format(MESSAGE_ERROR_READING_FROM_FILE, filePath));
-            exitProgram();
+            showErrorMessage(filePath, MESSAGE_ERROR_READING_FROM_FILE);
         }
         return lines;
+    }
+
+    //I added in this method to handle showing the error message and make the 'getLinesInFile' method tidier.
+    private static void showErrorMessage(String filePath, String message){
+        showToUser(String.format(message, filePath));
+        exitProgram();
+
     }
 
     /**
