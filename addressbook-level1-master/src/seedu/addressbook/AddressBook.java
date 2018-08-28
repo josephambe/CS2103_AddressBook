@@ -917,7 +917,7 @@ public class AddressBook {
      */
     private static Optional<String[]> decodePersonFromString(String encoded) {
         // check that we can extract the parts of a person from the encoded string
-        if (!isPersonDataExtractableFrom(encoded)) {
+        if (!isPersonDataExtractableFrom(encoded, 3)) { //Here is the extra argument I added to work with my new extracted method in line 960
             return Optional.empty();
         }
         final String[] decodedPerson = makePersonFromData(
@@ -954,10 +954,11 @@ public class AddressBook {
      *
      * @param personData person string representation
      */
-    private static boolean isPersonDataExtractableFrom(String personData) {
+    private static boolean isPersonDataExtractableFrom(String personData, int i) {
         final String matchAnyPersonDataPrefix = PERSON_DATA_PREFIX_PHONE + '|' + PERSON_DATA_PREFIX_EMAIL;
         final String[] splitArgs = personData.trim().split(matchAnyPersonDataPrefix);
-        return splitArgs.length == 3 // 3 arguments
+        return splitArgs.length == i // 3 arguments
+                //Here I extracted 3 to i so that you could add more arguments if you need to. Cmd+alt+P
                 && !splitArgs[0].isEmpty() // non-empty arguments
                 && !splitArgs[1].isEmpty()
                 && !splitArgs[2].isEmpty();
