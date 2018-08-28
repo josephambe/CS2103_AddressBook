@@ -500,7 +500,7 @@ public class AddressBook {
      * @return feedback display message for the operation result
      */
     private static String executeDeletePerson(String commandArgs) {
-        if (!isDeletePersonArgsValid(commandArgs)) {
+        if (!ValidArgsDeletePerson(commandArgs)) {
             return getMessageForInvalidCommandInput(COMMAND_DELETE_WORD, getUsageInfoForDeleteCommand());
         }
         final int targetVisibleIndex = extractTargetIndexFromDeletePersonArgs(commandArgs);
@@ -518,7 +518,7 @@ public class AddressBook {
      * @param rawArgs raw command args string for the delete person command
      * @return whether the input args string is valid
      */
-    private static boolean isDeletePersonArgsValid(String rawArgs) {
+    private static boolean ValidArgsDeletePerson(String rawArgs) {
         try {
             final int extractedIndex = Integer.parseInt(rawArgs.trim()); // use standard libraries to parse
             return extractedIndex >= DISPLAYED_INDEX_OFFSET;
@@ -716,8 +716,7 @@ public class AddressBook {
             storageFile.createNewFile();
             showToUser(String.format(MESSAGE_STORAGE_FILE_CREATED, filePath));
         } catch (IOException ioe) {
-            showToUser(String.format(MESSAGE_ERROR_CREATING_STORAGE_FILE, filePath));
-            exitProgram();
+            showErrorMessage(filePath, MESSAGE_ERROR_CREATING_STORAGE_FILE);
         }
     }
 
@@ -731,8 +730,7 @@ public class AddressBook {
     private static ArrayList<String[]> loadPersonsFromFile(String filePath) {
         final Optional<ArrayList<String[]>> successfullyDecoded = decodePersonsFromStrings(getLinesInFile(filePath));
         if (!successfullyDecoded.isPresent()) {
-            showToUser(MESSAGE_INVALID_STORAGE_FILE_CONTENT);
-            exitProgram();
+            showErrorMessage(filePath, MESSAGE_INVALID_STORAGE_FILE_CONTENT );
         }
         return successfullyDecoded.get();
     }
